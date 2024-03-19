@@ -15,7 +15,7 @@ public class SystemOperation {
     public static Object systemCall(SystemCallTypeEnum type, Process process) {
         if(type.equals(SystemCallTypeEnum.CREATE_PROCESS)) {
             if(Objects.isNull(mm)) {
-                mm = new MemoryManager(StrategyTypeEnum.FIRST_FIT);
+                mm = new MemoryManager(StrategyTypeEnum.BEST_FIT);
             }
             if(Objects.isNull(cm)) {
                 cm = new CpuManager();

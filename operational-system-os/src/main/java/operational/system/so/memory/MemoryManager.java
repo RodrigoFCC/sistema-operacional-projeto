@@ -2,8 +2,6 @@ package operational.system.so.memory;
 
 import operational.system.so.Process;
 
-import java.util.Objects;
-
 public class MemoryManager {
     private String[] memory;
     private StrategyTypeEnum strategy;
@@ -34,37 +32,78 @@ public class MemoryManager {
 
     private void writeUsingBesttFit(Process process) {
         int actualSize = 0;
-        AddressMemory addressMemory = new AddressMemory(0, 0);
+        AddressMemory addressMemory = new AddressMemory(0, 12);
 
         for(int i = 0; i < memory.length; i++) {
-            if(memory[i] == null) {
-                actualSize++;
-            } else if (memory[i] != null) {
-                if(actualSize == process.getSizeInMemory()) {
-                    // CAMINHO 100% FELIZ - ACTUALSIZE == PROCESSSIZE
-                    int start = i - actualSize;
-                    for(int j = start; j < (start+process.getSizeInMemory()); j++) {
-                        memory[j] = process.getId();
+            if(i == (memory.length-1)) {
+                if(actualSize > 0 || memory[i] == null) {
+                    if(memory[i] == null) {
+                        if(process.getSizeInMemory() <= (actualSize+1)) {
+                            if ((actualSize+1) > (addressMemory.getEnd()- addressMemory.getStart())) {
+                                for (int j = addressMemory.getStart(); j < process.getSizeInMemory(); j++) {
+                                    memory[j] = process.getId();
+                                }
+                                break;
+                            }
+                            System.out.println("To no 11");
+                            int start = (i - actualSize);
+                            for(int j = start; j < (start+process.getSizeInMemory()); j++) {
+                                memory[j] = process.getId();
+                            }
+                            actualSize = 0;
+                            break;
+                        }
+                        // TODO - FAZER UMA LÓGICA QUE INSIRA O P NO LUGAR QUE ESTÁ SALVO NA MEMÓRIA
+                    } else if (process.getSizeInMemory() < (addressMemory.getEnd()- addressMemory.getStart())) {
+                        for(int j = addressMemory.getStart(); j < process.getSizeInMemory(); j++) {
+                            memory[j] = process.getId();
+                        }
+                        actualSize = 0;
+                        break;
                     }
-                    break;
+                    System.out.println("WARNING: No memory for " + process.getId());
                 } else {
-                    if(actualSize > process.getSizeInMemory()) {
-                        if(actualSize < addressMemory.addressMemorySize(addressMemory)) {
-                            // TODO - SETA A NOVA MEMÓRIA
-                            addressMemory.setStart((i - actualSize));
-                            addressMemory.setEnd((i-1));
+                    if(process.getSizeInMemory() < (addressMemory.getEnd()- addressMemory.getStart())) {
+                        for(int j = addressMemory.getStart(); j < process.getSizeInMemory(); j++) {
+                            memory[j] = process.getId();
+                        }
+                        actualSize = 0;
+                        break;
+                    }
+                }
+            } else if (memory[i] == null) {
+                actualSize ++;
+            } else {
+                if(actualSize > 0) {
+                    if(process.getSizeInMemory() == actualSize) {
+                        System.out.println("Foi aqui? " + actualSize);
+                        int start = i - actualSize;
+                        int end = start + process.getSizeInMemory();
+                        for(int j = start; j < end; j++) {
+                            memory[j] = process.getId();
+                        }
+                        actualSize = 0;
+                        break;
+                    } else if (process.getSizeInMemory() < actualSize) {
+                        int start = i - actualSize;
+                        int end = i;
+                        System.out.println("Start atual: " + start);
+                        System.out.println("End atual: " + end);
+                        System.out.println("Start salvo no objeto: " + addressMemory.getStart());
+                        System.out.println("End salvo no objeto: " + addressMemory.getEnd());
+                        if((end - start) < (addressMemory.getEnd()- addressMemory.getStart())) {
+                            addressMemory.setStart(start);
+                            addressMemory.setEnd(end);
+                            System.out.println("Start novo salvo no objeto: " + addressMemory.getStart());
+                            System.out.println("End novo salvo no objeto: " + addressMemory.getEnd());
                             actualSize = 0;
                         }
+                        actualSize = 0;
                     } else {
                         actualSize = 0;
                     }
                 }
-            }
-            if(i == (memory.length-1)) {
-                // TODO - GRAVAR O P NA ÚLTIMA MEMÓRIA SALVA
-                for(int j = addressMemory.getStart(); j < addressMemory.getEnd(); j++) {
-                    memory[j] = process.getId();
-                }
+                actualSize = 0;
             }
         }
         printMemoryStatus();

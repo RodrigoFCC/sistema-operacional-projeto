@@ -19,20 +19,20 @@ public class Execute {
         Process p5 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
         SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p5);
         System.out.println("P5: " + p5.getSizeInMemory());
-        Process p6 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
-        SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p6);
-        System.out.println(p6.getSizeInMemory());
-        Process p7 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
-        SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p7);
-        System.out.println(p7.getSizeInMemory());
-        Process p8 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
-        SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p8);
-        System.out.println(p8.getSizeInMemory());
-        Process p9 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
-        SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p9);
-        System.out.println(p9.getSizeInMemory());
-        Process p10 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
-        SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p10);
-        System.out.println(p10.getSizeInMemory());
+//        Process p6 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
+//        SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p6);
+//        System.out.println(p6.getSizeInMemory());
+//        Process p7 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
+//        SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p7);
+//        System.out.println(p7.getSizeInMemory());
+//        Process p8 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
+//        SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p8);
+//        System.out.println(p8.getSizeInMemory());
+//        Process p9 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
+//        SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p9);
+//        System.out.println(p9.getSizeInMemory());
+//        Process p10 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
+//        SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p10);
+//        System.out.println(p10.getSizeInMemory());
     }
 }
