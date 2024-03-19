@@ -75,14 +75,10 @@ public class MemoryManager {
 
         for(int i = 0; i < memory.length; i++) {
             if(i == (memory.length-1)) {
-                System.out.println("ÚLTIMA - PARA O PROCESSO APÓS O DELETE O actualsize É: " + actualSize);
-                System.out.println("ÚLTIMA - PARA O PROCESSO APÓS O DELETE O i É: " + i);
                 if(actualSize > 0) {
                     if(process.getSizeInMemory() <= actualSize+1) {
                         int start = (i - actualSize);
-                        System.out.println("ÚLTIMA - PARA O PROCESSO APÓS O DELETE O START É: " + start);
                         for(int j = start; j < (start+process.getSizeInMemory()); j++) {
-                            System.out.println("FOI ESSE PRINT");
                             memory[j] = process.getId();
                         }
                         actualSize = 0;
