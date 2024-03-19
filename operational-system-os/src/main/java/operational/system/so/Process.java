@@ -19,10 +19,9 @@ public class Process {
     public Process() {
         setId(incrementId());
         Random r = new Random();
-//        List<Integer> numbers = Arrays.asList(1, 2, 5, 10, 15, 20, 25, 30, 50);
+//        List<Integer> numbers = Arrays.asList(10, 15, 20, 25, 30, 50);
         List<Integer> numbers = Arrays.asList(1, 2, 4);
         this.sizeInMemory = numbers.get(r.nextInt(numbers.size()));
-//        this.sizeInMemory = sizeInMemory;
     }
 
     public String getId() {
