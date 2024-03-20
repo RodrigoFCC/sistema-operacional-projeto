@@ -3,7 +3,7 @@ package operational.system.so;
 public class Execute {
     public static void main(String[] args) {
         Process p1 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
-//        p1.setSizeInMemory(3);
+        //        p1.setSizeInMemory(3);
         SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p1);
         System.out.println("P1: " + p1.getSizeInMemory());
 
@@ -23,6 +23,7 @@ public class Execute {
         System.out.println("P4: " + p4.getSizeInMemory());
 
         SystemOperation.systemCall(SystemCallTypeEnum.DELETE_PROCESS, p1);
+
         SystemOperation.systemCall(SystemCallTypeEnum.DELETE_PROCESS, p3);
 
         Process p5 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, null);
