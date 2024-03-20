@@ -15,7 +15,7 @@ public class MemoryManager {
         if(strategy.equals(StrategyTypeEnum.FIRST_FIT)) {
             this.writeUsingFirstFit(process);
         } else if(strategy.equals(StrategyTypeEnum.BEST_FIT)) {
-            this.writeUsingBesttFit(process);
+            this.writeUsingBestFit(process);
         }
         else if(strategy.equals(StrategyTypeEnum.WORST_FIT)) {
             this.writeUsingWorstFit(process);
@@ -31,7 +31,7 @@ public class MemoryManager {
     private void writeUsingWorstFit(Process process) {
     }
 
-    private void writeUsingBesttFit(Process process) {
+    private void writeUsingBestFit(Process process) {
         int actualSize = 0;
         AddressMemory addressMemory = new AddressMemory(0, 128);
 
