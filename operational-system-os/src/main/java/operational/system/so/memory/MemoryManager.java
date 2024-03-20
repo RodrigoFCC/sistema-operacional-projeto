@@ -35,8 +35,8 @@ public class MemoryManager {
         for(int i = 0; i < memory.length; i++) {
             if(i == (memory.length-1)) {
                 if(actualSize > 0 || memory[i] == null) {
-                    int lastStart = i - actualSize; // 11 - 3 = 8
-                    int lastEnd = i; //= 11
+                    int lastStart = i - actualSize;
+                    int lastEnd = i;
                     if(((lastEnd - lastStart) >= (addressMemory.getEnd()- addressMemory.getStart())) && process.getSizeInMemory() <= (lastEnd - lastStart)) {
                         addressMemory.setStart(lastStart);
                         addressMemory.setEnd(lastEnd);
@@ -104,8 +104,8 @@ public class MemoryManager {
             } else {
                 if(actualSize > 0) {
                     if (process.getSizeInMemory() <= actualSize) {
-                        int start = i - actualSize; // 8 - 4 = 4
-                        int end = i; // 8
+                        int start = i - actualSize;
+                        int end = i;
                         if((end - start) > (addressMemory.getEnd()- addressMemory.getStart())) {
                             addressMemory.setStart(start);
                             addressMemory.setEnd(end);
@@ -189,8 +189,8 @@ public class MemoryManager {
                         actualSize = 0;
                         break;
                     } else if (process.getSizeInMemory() < actualSize) {
-                        int start = i - actualSize; // 4
-                        int end = i; // 8
+                        int start = i - actualSize;
+                        int end = i;
                         if((end - start) < (addressMemory.getEnd()- addressMemory.getStart())) {
                             addressMemory.setStart(start);
                             addressMemory.setEnd(end);
