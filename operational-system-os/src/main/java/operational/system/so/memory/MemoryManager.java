@@ -7,7 +7,7 @@ public class MemoryManager {
     private String[] memory;
     private StrategyTypeEnum strategy;
     public MemoryManager(StrategyTypeEnum strategy) {
-        this.memory = new String[12];
+        this.memory = new String[128];
         this.strategy =strategy;
     }
 
@@ -121,7 +121,7 @@ public class MemoryManager {
         }
         Util.printMemoryStatus(memory);
     }
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     private void writeUsingBestFit(Process process) {
         int actualSize = 0;
         AddressMemory addressMemory = new AddressMemory(0, 128);
