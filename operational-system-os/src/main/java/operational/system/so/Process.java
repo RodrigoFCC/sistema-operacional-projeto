@@ -20,7 +20,7 @@ public class Process {
         setId(incrementId());
         Random r = new Random();
         List<Integer> numbers = Arrays.asList(10, 15, 20, 25, 30, 50);
-//        List<Integer> numbers = Arrays.asList(1, 2, 4);
+//        List<Integer> numbers = Arrays.asList(1, 2, 3, 4);
         this.sizeInMemory = numbers.get(r.nextInt(numbers.size()));
     }
 
