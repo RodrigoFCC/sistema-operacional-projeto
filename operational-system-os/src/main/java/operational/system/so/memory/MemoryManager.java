@@ -1,12 +1,13 @@
 package operational.system.so.memory;
 
 import operational.system.so.Process;
+import operational.system.so.utils.Util;
 
 public class MemoryManager {
     private String[] memory;
     private StrategyTypeEnum strategy;
     public MemoryManager(StrategyTypeEnum strategy) {
-        this.memory = new String[128];
+        this.memory = new String[12];
         this.strategy =strategy;
     }
 
@@ -40,28 +41,18 @@ public class MemoryManager {
                     if(memory[i] == null) {
                         if(process.getSizeInMemory() <= (actualSize+1)) {
                             if ((actualSize+1) > (addressMemory.getEnd()- addressMemory.getStart())) {
-                                for (int j = addressMemory.getStart(); j < process.getSizeInMemory(); j++) {
-                                    memory[j] = process.getId();
-                                }
+                                System.out.println("Usou do novo print");
+                                Util.paintMemory(memory, process, addressMemory.getStart(), addressMemory.getStart()+process.getSizeInMemory());
                                 break;
                             }
                             int start = (i - actualSize);
-                            for(int j = start; j < (start+process.getSizeInMemory()); j++) {
-                                memory[j] = process.getId();
-                            }
+                            Util.paintMemory(memory, process, start, start+process.getSizeInMemory());
                             actualSize = 0;
                             break;
                         } else if(process.getSizeInMemory() <= (addressMemory.getEnd()- addressMemory.getStart())) {
-                            int contNull = 0;
-                            for (int j = addressMemory.getStart(); j < (addressMemory.getStart()+ process.getSizeInMemory()); j++) {
-                                 if(memory[j] != null) {
-                                     contNull++;
-                                 }
-                            }
+                            int contNull = Util.nullValidation(memory, addressMemory.getStart(), addressMemory.getStart()+ process.getSizeInMemory());
                             if(contNull == 0) {
-                                for(int k = addressMemory.getStart(); k < (addressMemory.getStart()+process.getSizeInMemory()); k++) {
-                                    memory[k] = process.getId();
-                                }
+                                Util.paintMemory(memory, process, addressMemory.getStart(), addressMemory.getStart()+process.getSizeInMemory());
                                 actualSize = 0;
                                 break;
                             }
@@ -69,20 +60,23 @@ public class MemoryManager {
                             actualSize = 0;
                         }
                     } else if (process.getSizeInMemory() < (addressMemory.getEnd()- addressMemory.getStart())) {
-                        for(int j = addressMemory.getStart(); j < process.getSizeInMemory(); j++) {
-                            memory[j] = process.getId();
-                        }
+                        System.out.println("USOU O ESTRANHO 1");
+                        Util.paintMemory(memory, process, addressMemory.getStart(), addressMemory.getStart()+process.getSizeInMemory());
                         actualSize = 0;
                         break;
                     }
                     System.out.println("WARNING: No memory for " + process.getId());
                 } else {
                     if(process.getSizeInMemory() < (addressMemory.getEnd()- addressMemory.getStart())) {
-                        for(int j = addressMemory.getStart(); j < process.getSizeInMemory(); j++) {
-                            memory[j] = process.getId();
+                        // ESSE CASO ESTÁ ESTRANHO. O END DELE ESTÁ INDO SOMENTE ATÉ O TAMANHO DO PROCESSO, NÃO SOMA COM O START. TEMOS QUE VALIDAR ISSO
+                        int contNull = Util.nullValidation(memory, addressMemory.getStart(), addressMemory.getStart()+ process.getSizeInMemory());
+                        if(contNull == 0) {
+                            Util.paintMemory(memory, process, addressMemory.getStart(), process.getSizeInMemory());
+                            actualSize = 0;
+                            break;
                         }
+                        contNull = 0;
                         actualSize = 0;
-                        break;
                     }
                 }
             } else if (memory[i] == null) {
@@ -92,9 +86,7 @@ public class MemoryManager {
                     if(process.getSizeInMemory() == actualSize) {
                         int start = i - actualSize;
                         int end = start + process.getSizeInMemory();
-                        for(int j = start; j < end; j++) {
-                            memory[j] = process.getId();
-                        }
+                        Util.paintMemory(memory, process, start, end);
                         actualSize = 0;
                         break;
                     } else if (process.getSizeInMemory() < actualSize) {
@@ -113,7 +105,7 @@ public class MemoryManager {
                 actualSize = 0;
             }
         }
-        printMemoryStatus();
+        Util.printMemoryStatus(memory);
     }
 
     private void writeUsingFirstFit(Process process) {
@@ -124,9 +116,7 @@ public class MemoryManager {
                 if(actualSize > 0) {
                     if(process.getSizeInMemory() <= actualSize+1) {
                         int start = (i - actualSize);
-                        for(int j = start; j < (start+process.getSizeInMemory()); j++) {
-                            memory[j] = process.getId();
-                        }
+                        Util.paintMemory(memory, process, start, start+ process.getSizeInMemory());
                         actualSize = 0;
                         break;
                     }
@@ -137,21 +127,16 @@ public class MemoryManager {
             }
             else {
                 if(actualSize > 0) {
-                    if(process.getSizeInMemory() < actualSize) {
+                    if(process.getSizeInMemory() == actualSize) {
                         int start = i - actualSize;
-                        int end = i - process.getSizeInMemory();
-                        for(int j = start; j < end; j++) {
-                            memory[j] = process.getId();
-                        }
+                        int end = start + process.getSizeInMemory();
+                        Util.paintMemory(memory, process, start, end);
                         actualSize = 0;
                         break;
-                    } else if (process.getSizeInMemory() == actualSize) {
+                    } else if (process.getSizeInMemory() < actualSize) {
                         int start = i - actualSize;
-
-                        int end = i - 1;
-                        for(int j = start; j <= end; j++) {
-                            memory[j] = process.getId();
-                        }
+                        int end = start + process.getSizeInMemory();
+                        Util.paintMemory(memory, process, start, end);
                         actualSize = 0;
                         break;
                     } else {
@@ -160,7 +145,7 @@ public class MemoryManager {
                 }
             }
         }
-        printMemoryStatus();
+        Util.printMemoryStatus(memory);
     }
 
     public void deleteProcessInMemory(Process process) {
@@ -169,13 +154,6 @@ public class MemoryManager {
                 memory[i] = null;
             }
         }
-        printMemoryStatus();
-    }
-
-    private void printMemoryStatus () {
-        for (int i = 0; i < memory.length; i++) {
-            System.out.print(memory[i] + " | ");
-        }
-        System.out.println("FINISH");
+        Util.printMemoryStatus(memory);
     }
 }
