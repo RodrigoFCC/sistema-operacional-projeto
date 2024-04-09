@@ -1,13 +1,13 @@
 package operational.system.so.utils;
 
-import operational.system.so.Process;
+import operational.system.so.SoProcess;
 
 
 public class Util {
 
-    public static void paintMemory (String[] memory, Process process, int start, int end) {
+    public static void paintMemory (String[] memory, SoProcess soProcess, int start, int end) {
         for (int j = start; j < end; j++) {
-            memory[j] = process.getId();
+            memory[j] = soProcess.getId();
         }
     }
     public static int nullValidation (String[] memory, int start, int end) {
