@@ -1,27 +1,29 @@
 package operational.system.so;
 
-import operational.system.so.memory.AddressMemory;
-
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 public class Process {
     private String id;
     private int sizeInMemory;
-    private int timeToExecute;
-    private int priority;
-    private List<Process> processes;
-    private int instructions;
-    private AddressMemory addressMemory;
+    private List<String> processes;
     private static int processNumber = 0;
+    private int timeToExecute;
+    private PriorityProcessType priorityProcessType;
 
-    public Process() {
+    public Process(int sizeMemory) {
         setId(incrementId());
-        Random r = new Random();
-        List<Integer> numbers = Arrays.asList(10, 15, 20, 25, 30, 50);
-//        List<Integer> numbers = Arrays.asList(1, 2, 3, 4);
-        this.sizeInMemory = numbers.get(r.nextInt(numbers.size()));
+        this.sizeInMemory = sizeMemory;
+        this.processes = this.getProcesses();
+
+        Random rand = new Random();
+        List<Integer> times = Arrays.asList(100, 200, 500, 1000, 5000, 10000);
+        this.timeToExecute = times.get(rand.nextInt(times.size()));
+
+        PriorityProcessType[] priorityList = PriorityProcessType.values();
+        this.priorityProcessType = priorityList[(rand.nextInt(priorityList.length))];
     }
 
     public String getId() {
@@ -52,35 +54,18 @@ public class Process {
         this.timeToExecute = timeToExecute;
     }
 
-    public int getPriority() {
-        return priority;
+    public PriorityProcessType getPriorityProcessType() {
+        return priorityProcessType;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public List<Process> getProcesses() {
-        return processes;
-    }
-
-    public void setProcesses(List<Process> processes) {
-        this.processes = processes;
-    }
-
-    public int getInstructions() {
-        return instructions;
-    }
-
-    public void setInstructions(int instructions) {
-        this.instructions = instructions;
-    }
-
-    public AddressMemory getAddressMemory() {
-        return addressMemory;
-    }
-
-    public void setAddressMemory(AddressMemory addressMemory) {
-        this.addressMemory = addressMemory;
+    public List<String> getProcesses() {
+        if(this.processes == null) {
+            this.processes = new LinkedList<>();
+            for(int i = 0; i < this.sizeInMemory; i++) {
+                String spId = this.getId() + i;
+                this.processes.add(spId);
+            }
+        }
+        return this.processes;
     }
 }

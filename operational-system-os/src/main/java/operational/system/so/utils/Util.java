@@ -1,29 +1,20 @@
 package operational.system.so.utils;
 
-import operational.system.so.Process;
+import operational.system.so.SubProcess;
 
 
 public class Util {
 
-    public static void paintMemory (String[] memory, Process process, int start, int end) {
-        for (int j = start; j < end; j++) {
-            memory[j] = process.getId();
-        }
-    }
-    public static int nullValidation (String[] memory, int start, int end) {
-        int contNull = 0;
-        for (int j = start; j < end; j++) {
-            if (memory[j] != null) {
-                contNull++;
+    public static void printMemoryStatus (SubProcess[][] physicalMemory, int pageSize) {
+        for (int i = 0; i < physicalMemory.length; i++) {
+            for(int j = 0; j < pageSize; j++) {
+                if (physicalMemory[i][j] != null) {
+                    System.out.print(physicalMemory[i][j].getId() + " | ");
+                } else {
+                    System.out.print(physicalMemory[i][j] + " | ");
+                }
             }
+            System.out.println("");
         }
-        return contNull;
-    }
-
-    public static void printMemoryStatus (String[] memory) {
-        for (int i = 0; i < memory.length; i++) {
-            System.out.print(memory[i] + " | ");
-        }
-        System.out.println("FINISH");
     }
 }
