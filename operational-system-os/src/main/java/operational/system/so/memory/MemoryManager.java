@@ -1,10 +1,8 @@
 package operational.system.so.memory;
 
 import operational.system.so.SoProcess;
-import operational.system.so.utils.Util;
 import operational.system.so.SubProcess;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,7 +82,18 @@ public class MemoryManager {
             }
         }
     }
-    public void deleteProcessInMemory(SoProcess soProcess) {
+
+    public List<SubProcess> read (SoProcess soProcess) {
+        List<String> ids = soProcess.getProcesses();
+        List<SubProcess> sps = new LinkedList<>();
+        for(String id : ids){
+            FrameMemory frame = this.logicalMemory.get(id);
+            sps.add(this.physicalMemory[frame.getFrameNumber()][frame.getOffset()]);
+        }
+        return sps;
+    }
+
+    public void closeProcessInMemory(SoProcess soProcess) {
 //        for(int i = 0; i < physicalMemory.length; i++) {
 //            if(physicalMemory[i] == soProcess.getId()) {
 //                physicalMemory[i] = null;

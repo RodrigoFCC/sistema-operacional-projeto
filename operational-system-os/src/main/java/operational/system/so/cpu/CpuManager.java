@@ -11,12 +11,17 @@ public class CpuManager {
     private Core[] cores;
 
     public static int CAPACITY = 7;
+    public static int NUM_OF_CORES = 4;
+    public static int CLOCK = 1000;
 
-    public CpuManager(int numOfCores) {
-        this.cores = new Core[numOfCores];
+
+
+    public CpuManager() {
+        this.cores = new Core[NUM_OF_CORES];
         for (int i = 0; i < this.cores.length; i++) {
             this.cores[i] = new Core(i, CAPACITY);
         }
+        clock();
     }
 
     public void registerProcess(int coreIndex, SubProcess sp) {
@@ -24,22 +29,24 @@ public class CpuManager {
     }
 
     public void clock() {
-        new Timer().schedule(new TimerTask() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 executeProcesses();
             }
-        }, 500);
+        }, 0, CLOCK);
     }
 
     private void executeProcesses() {
         for (Core core: this.cores) {
-            core.run();
+            if(core.getCurrentSubProcess() != null){
+                core.run();
+            }
         }
     }
 
-    public List<Core> getAvailableCores() {
-        return null;
+    public Core[] getCores() {
+        return this.cores;
     }
 
 }

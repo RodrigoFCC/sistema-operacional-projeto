@@ -2,10 +2,13 @@ package operational.system.so;
 
 import operational.system.so.memory.AddressMemory;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 public class SubProcess {
 
     private String id;
-    private int timeToExecute;
     private int instructions;
     private AddressMemory addressMemory;
     public static int processNumber = 0;

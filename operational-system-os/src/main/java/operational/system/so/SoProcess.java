@@ -1,19 +1,29 @@
 package operational.system.so;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class SoProcess {
     private String id;
     private int sizeInMemory;
+    private int timeToExecute;
     private List<String> processes;
-    private static int processNumber = 0;
+    private PriorityProcessType priorityType;
+    private static int processNumber;
 
-    private static int numberOfInstructions = 7;
-    private static int timeToExecute = 5000;
 
     public SoProcess(int sizeMemory) {
         setId(incrementId());
+
+        Random rand = new Random();
+        List<Integer> timeList = Arrays.asList(100,200,300,400,500,600,700,800,900,1000,10000);
+        this.timeToExecute = timeList.get(rand.nextInt(timeList.size()));
+
+        PriorityProcessType[] priorityList = PriorityProcessType.values();
+        this.priorityType = priorityList[rand.nextInt(priorityList.length)];
+
         this.sizeInMemory = sizeMemory;
         this.processes = this.getProcesses();
     }
@@ -49,6 +59,22 @@ public class SoProcess {
         }
 
         return this.processes;
+    }
+
+    public int getTimeToExecute() {
+        return timeToExecute;
+    }
+
+    public void setTimeToExecute(int timeToExecute) {
+        this.timeToExecute = timeToExecute;
+    }
+
+    public PriorityProcessType getPriorityType() {
+        return priorityType;
+    }
+
+    public void setPriorityType(PriorityProcessType priorityType) {
+        this.priorityType = priorityType;
     }
 }
 
