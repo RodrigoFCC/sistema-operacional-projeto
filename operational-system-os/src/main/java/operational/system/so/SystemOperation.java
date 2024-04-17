@@ -27,9 +27,9 @@ public class SystemOperation {
     public static List<SubProcess> systemCall(SystemCallTypeEnum type, Process process) {
         if(type.equals(SystemCallTypeEnum.WRITE_PROCESS)) {
             mm.write(process);
-//            scheduler.execute(process);
+            scheduler.execute(process);
         } else if(type.equals(SystemCallTypeEnum.READ_PROCESS)) {
-//            return mm.read(process);
+            return mm.read(process);
         } else if(type.equals(SystemCallTypeEnum.CLOSE_PROCESS)) {
              mm.delete(process);
 //            scheduler.delete(process);

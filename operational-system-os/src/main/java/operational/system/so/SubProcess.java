@@ -31,7 +31,7 @@ public class SubProcess {
     }
 
     private String incrementId() {
-        String id = "-" + Integer.toString(subProcessNumber);
+        String id = Integer.toString(subProcessNumber);
         subProcessNumber++;
         return id;
     }
