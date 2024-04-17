@@ -37,18 +37,23 @@ public class SchedulerQueue extends Scheduler{
     }
 
     private void registerSubProcesses() {
-//        while () {
+        int cc = 0;
+        while (cc < 7) {
             Process process = this.queue.peek();
             List<SubProcess> sps = this.subProcesses.get(process.getId());
-
             Core[] cores = this.getCpuM().getCores();
             for(Core core : cores) {
-                if(core.getCurrentSubProcess() != null) {
-                    SubProcess sp = sps.get(0);
+                if(core.getCurrentSubProcess() == null) {
+                    SubProcess sp = sps.get(cc);
                     this.getCpuM().registerProcess(core.getId(), sp);
+                    System.out.println("Processo " + sp.getId() + " entrou no core " + core.getId());
+                    cc++;
+                } else {
+                    System.out.println("O core " + core.getId() + " está ocupado!");
+                    cc++;
                 }
             }
-//        }
+        }
     }
 
     @Override

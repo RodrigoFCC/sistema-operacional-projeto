@@ -2,7 +2,7 @@ package operational.system.so;
 
 public class Execute {
     public static void main(String[] args) {
-        Process p1 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, 7);
+        Process p1 = (Process) SystemOperation.systemCall(SystemCallTypeEnum.CREATE_PROCESS, 9);
         SystemOperation.systemCall(SystemCallTypeEnum.WRITE_PROCESS, p1);
         System.out.println("P1: " + p1.getSizeInMemory() + "***********************************");
 //
