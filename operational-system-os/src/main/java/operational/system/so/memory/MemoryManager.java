@@ -30,19 +30,21 @@ public class MemoryManager {
 
     private void writeUsingPaging(Process process) {
         List<FrameMemory> frames = getFrames(process);
-        if(frames != null) {
+        if (frames != null) {
+            SubProcess.resetSubProcessNumber();
             int subProcessSize = 0;
-            for(int i = 0; i < frames.size(); i++) {
-                for(int offset = 0; offset < this.pageSize; offset++) {
-                    FrameMemory frame = frames.get(i);
-                    //MEMÓRIA FÍSICA
+            for (int i = 0; i < frames.size(); i++) {
+                for (int offset = 0; offset < this.pageSize; offset++) {
+                    FrameMemory originalFrame = frames.get(i);
+                    FrameMemory frame = originalFrame.clone();
+                    frame.setOffset(offset);
+
                     SubProcess sp = new SubProcess(process.getId(), NUMBER_OF_INSTRUCTIONS_PER_SUBPROCESS);
                     this.physicalMemory[frame.getFrameNumber()][offset] = sp;
-                    //MEMÓRIA LÓGICA
-                    frame.setOffset(offset);
+
                     this.logicalMemory.put(sp.getId(), frame);
                     subProcessSize++;
-                    if((subProcessSize) == process.getSizeInMemory()) {
+                    if (subProcessSize == process.getSizeInMemory()) {
                         subProcessSize = 0;
                         frames.clear();
                         break;
@@ -51,9 +53,10 @@ public class MemoryManager {
             }
             Util.printMemoryStatus(this.physicalMemory, this.pageSize);
         } else {
-            //TODO - TROCA DE PÁGINA
+            // TODO - TROCA DE PÁGINA
         }
     }
+
 
     private List<FrameMemory> getFrames(Process process) {
         List<FrameMemory> frames = new LinkedList<>();
@@ -72,8 +75,9 @@ public class MemoryManager {
     public List<SubProcess> read(Process process) {
         List<String> ids = process.getProcesses();
         List<SubProcess> subProcesses = new LinkedList<>();
-        for(String id : ids) {
+        for (String id : ids) {
             FrameMemory frame = this.logicalMemory.get(id);
+            System.out.println("Storing frame: FrameNumber=" + frame.getFrameNumber() + ", Offset=" + frame.getOffset());
             subProcesses.add(this.physicalMemory[frame.getFrameNumber()][frame.getOffset()]);
         }
         return subProcesses;

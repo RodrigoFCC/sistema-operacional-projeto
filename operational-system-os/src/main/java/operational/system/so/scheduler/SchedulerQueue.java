@@ -13,10 +13,14 @@ import java.util.PriorityQueue;
 
 public class SchedulerQueue extends Scheduler{
     private PriorityQueue<Process> queue;
-    private Hashtable<String, List<SubProcess>> subProcesses;
+    private Hashtable<String, List<SubProcess>> subProcesses = new Hashtable<>();
 
     public SchedulerQueue(Comparator<Process> comparator) {
         this.queue = new PriorityQueue<>(comparator);
+    }
+
+    public SchedulerQueue() {
+        this.subProcesses = new Hashtable<>();
     }
 
     public PriorityQueue<Process> getQueue() {

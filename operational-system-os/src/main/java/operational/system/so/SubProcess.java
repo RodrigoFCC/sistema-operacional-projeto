@@ -35,4 +35,8 @@ public class SubProcess {
         subProcessNumber++;
         return id;
     }
+
+    public static void resetSubProcessNumber() {
+        subProcessNumber = 0;
+    }
 }
