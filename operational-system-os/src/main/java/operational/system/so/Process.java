@@ -1,9 +1,7 @@
 package operational.system.so;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 public class Process {
     private String id;
@@ -11,19 +9,17 @@ public class Process {
     private List<String> processes;
     private static int processNumber = 0;
     private int timeToExecute;
-    private PriorityProcessType priorityProcessType;
+    private int priorityProcessType;
 
-    public Process(int sizeMemory) {
+    public Process(int sizeMemory, int timeToExecute, int priority) {
         setId(incrementId());
         this.sizeInMemory = sizeMemory;
         this.processes = this.getProcesses();
 
-        Random rand = new Random();
-        List<Integer> times = Arrays.asList(100, 200, 500, 1000, 5000, 10000);
-        this.timeToExecute = times.get(rand.nextInt(times.size()));
 
-        PriorityProcessType[] priorityList = PriorityProcessType.values();
-        this.priorityProcessType = priorityList[(rand.nextInt(priorityList.length))];
+        this.timeToExecute =timeToExecute;
+
+        this.priorityProcessType = priority;
     }
 
     public String getId() {
@@ -54,7 +50,7 @@ public class Process {
         this.timeToExecute = timeToExecute;
     }
 
-    public PriorityProcessType getPriorityProcessType() {
+    public int getPriorityProcessType() {
         return priorityProcessType;
     }
 

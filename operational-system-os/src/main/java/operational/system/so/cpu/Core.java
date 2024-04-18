@@ -1,13 +1,14 @@
 package operational.system.so.cpu;
 
 import operational.system.so.SubProcess;
+import operational.system.so.utils.ProcessListener;
 
 public class Core implements Runnable {
     private int id;
     private SubProcess currentSubProcess;
     private int numberOfInstructionsPerClock;
     private int count;
-
+    private ProcessListener processListener;
     public Core(int id, int numberOfInstructionsPerClock) {
         this.id = id;
         this.numberOfInstructionsPerClock = numberOfInstructionsPerClock;
@@ -16,7 +17,8 @@ public class Core implements Runnable {
     @Override
     public void run() {
         count += numberOfInstructionsPerClock;
-        if(count >= this.currentSubProcess.getInstructions()) {
+        if(this.currentSubProcess != null || count >= this.currentSubProcess.getInstructions()) {
+            System.out.println("Running the subprocess -" + this.currentSubProcess.getId() + "- in core: " + this.getId());
             this.finishExecution();
         }
     }

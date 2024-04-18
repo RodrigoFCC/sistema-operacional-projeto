@@ -4,6 +4,7 @@ import operational.system.so.Process;
 import operational.system.so.SubProcess;
 import operational.system.so.utils.Util;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,51 +26,34 @@ public class MemoryManager {
     }
 
     public void write (Process process) {
-        this.writeUsingPaging(process);
+        this.allocateProcessWithPaging(process);
     }
-
-    private void writeUsingPaging(Process process) {
-        List<FrameMemory> frames = getFrames(process);
-        if (frames != null) {
-            SubProcess.resetSubProcessNumber();
-            int subProcessSize = 0;
-            for (int i = 0; i < frames.size(); i++) {
-                for (int offset = 0; offset < this.pageSize; offset++) {
-                    FrameMemory originalFrame = frames.get(i);
-                    FrameMemory frame = originalFrame.clone();
-                    frame.setOffset(offset);
-
-                    SubProcess sp = new SubProcess(process.getId(), NUMBER_OF_INSTRUCTIONS_PER_SUBPROCESS);
-                    this.physicalMemory[frame.getFrameNumber()][offset] = sp;
-
-                    this.logicalMemory.put(sp.getId(), frame);
-                    subProcessSize++;
-                    if (subProcessSize == process.getSizeInMemory()) {
-                        subProcessSize = 0;
-                        frames.clear();
-                        break;
-                    }
-                }
-            }
-            Util.printMemoryStatus(this.physicalMemory, this.pageSize);
-        } else {
-            // TODO - TROCA DE PÁGINA
-        }
-    }
-
-
-    private List<FrameMemory> getFrames(Process process) {
-        List<FrameMemory> frames = new LinkedList<>();
-        int numberOfFramerPerProcess = (int) (Math.ceil(process.getSizeInMemory()/this.pageSize)+ 1);
-        for(int frame = 0; frame < this.physicalMemory.length; frame++) {
-            if(this.physicalMemory[frame][0] == null) {
-                frames.add(new FrameMemory(frame));
-                if(frames.size() == numberOfFramerPerProcess) {
-                    return frames;
-                }
+    private List<Integer> findEmptyPages() {
+        List<Integer> framesIndex = new ArrayList<>();
+        for (int frame = 0; frame < this.physicalMemory.length; frame++) {
+            SubProcess[] element = this.physicalMemory[frame];
+            if (element[0] == null) {
+                framesIndex.add(frame);
             }
         }
-        return null;
+        return framesIndex;
+    }
+
+    private void allocateProcessWithPaging(Process process) {
+        List<Integer> emptyFrames = findEmptyPages();
+        int countSize = 0;
+        for (Integer indexFrame : emptyFrames) {
+            SubProcess[] page = this.physicalMemory[indexFrame];
+            int indexPage = 0;
+            while (indexPage < page.length && countSize < process.getSizeInMemory()) {
+                String subProcessId = process.getProcesses().get(countSize);
+                this.physicalMemory[indexFrame][indexPage] = new SubProcess(subProcessId, process);
+                this.logicalMemory.put(subProcessId, new FrameMemory(indexFrame, indexPage));
+                countSize++;
+                indexPage++;
+            }
+        }
+        Util.printMemoryStatus(this.physicalMemory, this.pageSize);
     }
 
     public List<SubProcess> read(Process process) {
@@ -77,13 +61,15 @@ public class MemoryManager {
         List<SubProcess> subProcesses = new LinkedList<>();
         for (String id : ids) {
             FrameMemory frame = this.logicalMemory.get(id);
-            System.out.println("Storing frame: FrameNumber=" + frame.getFrameNumber() + ", Offset=" + frame.getOffset());
-            subProcesses.add(this.physicalMemory[frame.getFrameNumber()][frame.getOffset()]);
+            if (frame != null) {
+                subProcesses.add(this.physicalMemory[frame.getFrameNumber()][frame.getOffset()]);
+            }
         }
         return subProcesses;
     }
 
-    public void delete(Process process) {
-
+    public boolean checkWrite(Process process) {
+        List<Integer> emptyframes = findEmptyPages();
+        return emptyframes.size() >= (double) process.getSizeInMemory() / this.pageSize;
     }
 }

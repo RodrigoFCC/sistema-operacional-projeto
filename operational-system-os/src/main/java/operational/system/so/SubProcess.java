@@ -3,15 +3,13 @@ package operational.system.so;
 public class SubProcess {
     private String id;
     private int instructions;
-    private static int subProcessNumber = 0;
 
-    public SubProcess(String processId, int instructionsNumber, int timeToExecute) {
-        setId(processId + incrementId());
-        this.instructions = instructionsNumber;
-    }
+    private Process process;
 
-    public SubProcess(String processId, int instructionsNumber) {
-        this(processId, instructionsNumber, 0);
+    public SubProcess(String id, Process process) {
+        this.id = id;
+        this.instructions = 7;
+        this.process = process;
     }
 
     public String getId() {
@@ -26,17 +24,11 @@ public class SubProcess {
         return instructions;
     }
 
-    public void setInstructions(int instructions) {
-        this.instructions = instructions;
+    public Process getProcess() {
+        return process;
     }
 
-    private String incrementId() {
-        String id = Integer.toString(subProcessNumber);
-        subProcessNumber++;
-        return id;
-    }
-
-    public static void resetSubProcessNumber() {
-        subProcessNumber = 0;
+    public void setProcess(Process process) {
+        this.process = process;
     }
 }
